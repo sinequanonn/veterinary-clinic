@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 public class Pet {
     private static final int MAX_NAME_LENGTH = 20;
+    private static final double MIN_WEIGHT = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +18,10 @@ public class Pet {
     @Column(nullable = false, length = MAX_NAME_LENGTH)
     private String petName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = MAX_NAME_LENGTH)
     private String ownerName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = MAX_NAME_LENGTH)
     private String breed;
 
     @Column(nullable = false)
@@ -36,12 +37,26 @@ public class Pet {
         validatePetName(petName);
         validateOwnerName(ownerName);
         validateBreed(breed);
+        validateWeight(weight);
+        validateBirthDate(birthDate);
 
         this.petName = petName;
         this.ownerName = ownerName;
         this.breed = breed;
         this.weight = weight;
         this.birthDate = birthDate;
+    }
+
+    private void validateBirthDate(LocalDate birthDate) {
+        if (birthDate.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("날짜는 오늘 이전 날짜여야 합니다.");
+        }
+    }
+
+    private void validateWeight(double weight) {
+        if (weight <= MIN_WEIGHT) {
+            throw new IllegalArgumentException("체중은 0보다 커야 합니다.");
+        }
     }
 
     private void validateBreed(String breed) {
