@@ -17,6 +17,14 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medialRecordId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pet_id", nullable = false)
+    Pet pet;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vet_id", nullable = false)
+    Vet vet;
+
     @Column(nullable = false)
     private LocalDate recordDate;
 
@@ -35,13 +43,15 @@ public class MedicalRecord {
     protected MedicalRecord() {
     }
 
-    public MedicalRecord(LocalDate recordDate, String subjective, String objective, String assessment, String plan) {
+    public MedicalRecord(Pet pet, Vet vet, LocalDate recordDate, String subjective, String objective, String assessment, String plan) {
         validateRecordDate(recordDate);
         validateSubjective(subjective);
         validateObjective(objective);
         validateAssessment(assessment);
         validatePlan(plan);
 
+        this.pet = pet;
+        this.vet = vet;
         this.recordDate = recordDate;
         this.subjective = subjective;
         this.objective = objective;

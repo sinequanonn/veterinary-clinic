@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -29,6 +31,9 @@ public class Pet {
 
     @Column(nullable = false)
     private LocalDate birthDate;
+
+    @OneToMany(mappedBy = "pet")
+    List<MedicalRecord> medicalRecords = new ArrayList<>();
 
     protected Pet() {
     }

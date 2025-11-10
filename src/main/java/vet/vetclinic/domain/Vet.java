@@ -3,6 +3,9 @@ package vet.vetclinic.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 public class Vet {
@@ -14,6 +17,9 @@ public class Vet {
 
     @Column(nullable = false, length=MAX_NAME_LENGTH)
     private String vetName;
+
+    @OneToMany(mappedBy = "vet")
+    List<MedicalRecord> medicalRecords = new ArrayList<>();
 
     protected Vet() {
     }
