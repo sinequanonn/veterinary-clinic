@@ -70,12 +70,12 @@ public class MedicalRecordTest {
 
     @ParameterizedTest
     @ValueSource(ints = {501, 1500, 2000})
-    void 주관적판단이_500자_초과이면_예외를_발생한다(int repe) {
+    void 주관적판단이_500자_초과이면_예외를_발생한다(int repeition) {
         //given
         Pet pet = createPet();
         Vet vet = createVet();
         LocalDate recordDate = LocalDate.of(2025, 11, 10);
-        String subjective = "a".repeat(repe);
+        String subjective = "a".repeat(repeition);
         String objective = "객관적 판단 테스트 작성";
         String assessment = "급성 테스트 작성";
         String plan = "테스트 검사 계획";
@@ -106,13 +106,13 @@ public class MedicalRecordTest {
 
     @ParameterizedTest
     @ValueSource(ints = {501, 1500, 2000})
-    void 객관적판단이_500자_초과이면_예외를_발생한다(int repe) {
+    void 객관적판단이_500자_초과이면_예외를_발생한다(int repeition) {
         //given
         Pet pet = createPet();
         Vet vet = createVet();
         LocalDate recordDate = LocalDate.of(2025, 11, 10);
         String subjective = "주관적 판단 테스트 작성";
-        String objective = "a".repeat(repe);
+        String objective = "a".repeat(repeition);
         String assessment = "급성 테스트 작성";
         String plan = "테스트 검사 계획";
 
@@ -142,14 +142,14 @@ public class MedicalRecordTest {
 
     @ParameterizedTest
     @ValueSource(ints = {201, 202, 300})
-    void 확정진단명이_200자_초과이면_예외를_발생한다(int repe) {
+    void 확정진단명이_200자_초과이면_예외를_발생한다(int repeition) {
         //given
         Pet pet = createPet();
         Vet vet = createVet();
         LocalDate recordDate = LocalDate.of(2025, 11, 10);
         String subjective = "주관적 판단 테스트 작성";
         String objective = "객관적 판단 테스트 작성";
-        String assessment = "a".repeat(repe);
+        String assessment = "a".repeat(repeition);
         String plan = "테스트 검사 계획";
 
         //when&then
@@ -178,7 +178,7 @@ public class MedicalRecordTest {
 
     @ParameterizedTest
     @ValueSource(ints = {501, 502, 1500})
-    void 진료계획이_500자_초과이면_예외를_발생한다(int repe) {
+    void 진료계획이_500자_초과이면_예외를_발생한다(int repetition) {
         //given
         Pet pet = createPet();
         Vet vet = createVet();
@@ -186,7 +186,7 @@ public class MedicalRecordTest {
         String subjective = "주관적 판단 테스트 작성";
         String objective = "객관적 판단 테스트 작성";
         String assessment = "급성 테스트 작성";
-        String plan = "a".repeat(repe);
+        String plan = "a".repeat(repetition);
 
         //when&then
         Assertions.assertThatThrownBy(() -> new MedicalRecord(pet, vet, recordDate, subjective, objective, assessment, plan))
