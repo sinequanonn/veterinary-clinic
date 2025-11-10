@@ -19,11 +19,11 @@ public class MedicalRecord {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
-    Pet pet;
+    private Pet pet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vet_id", nullable = false)
-    Vet vet;
+    private Vet vet;
 
     @Column(nullable = false)
     private LocalDate recordDate;
