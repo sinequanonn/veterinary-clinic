@@ -52,6 +52,14 @@ public class Pet {
         this.birthDate = birthDate;
     }
 
+    public void updatePet(String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
+        this.petName = petName;
+        this.ownerName = ownerName;
+        this.breed = breed;
+        this.weight = weight;
+        this.birthDate = birthDate;
+    }
+
     private void validateBirthDate(LocalDate birthDate) {
         if (birthDate.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("날짜는 오늘 이전 날짜여야 합니다.");
