@@ -143,4 +143,23 @@ public class MedicalReportRepositoryTest {
         assertThat(updatedMedicalReport.getPlan()).isEqualTo("진료 계획 테스트 수정");
         assertThat(updatedMedicalReport.getPostoperativeCare()).isEqualTo("추후 관리 테스트 수정");
     }
+
+    @Test
+    void 진료소견서를_삭제한다() {
+        //given
+        MedicalReport medicalReport = new MedicalReport(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주요 증상 테스트 작성1",
+                "확정 진단 테스트 작성1",
+                "진료 계획 테스트 작성1",
+                "추후 관리 테스트 작성1");
+        MedicalReport savedMedicalReport = medicalReportRepository.save(medicalReport);
+
+        //when
+        medicalReportRepository.deleteById(savedMedicalReport.getMedicalReportId());
+        Optional<MedicalReport> foundMedicalReport = medicalReportRepository.findById(savedMedicalReport.getMedicalReportId());
+
+        //then
+        assertThat(foundMedicalReport).isEmpty();
+    }
 }
