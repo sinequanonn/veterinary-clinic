@@ -59,6 +59,14 @@ public class MedicalRecord {
         this.plan = plan;
     }
 
+    public void updateMedicalRecord(LocalDate recordDate, String subjective, String objective, String assessment, String plan) {
+        this.recordDate = recordDate;
+        this.subjective = subjective;
+        this.objective = objective;
+        this.assessment = assessment;
+        this.plan = plan;
+    }
+
     private void validatePlan(String plan) {
         if (plan == null || plan.isBlank()) {
             throw new IllegalArgumentException("진료 계획은 1자 이상 500자 이하여야 합니다.");
