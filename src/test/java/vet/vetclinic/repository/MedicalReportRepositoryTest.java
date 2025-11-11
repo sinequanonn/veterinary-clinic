@@ -11,6 +11,7 @@ import vet.vetclinic.domain.Pet;
 import vet.vetclinic.domain.Vet;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,5 +58,39 @@ public class MedicalReportRepositoryTest {
         assertThat(savedMedicalReport.getAssessment()).isEqualTo(assessment);
         assertThat(savedMedicalReport.getPlan()).isEqualTo(plan);
         assertThat(savedMedicalReport.getPostoperativeCare()).isEqualTo(postoperativeCare);
+    }
+
+    @Test
+    void 하나의_환자의_모든_진료소견서를_조회한다() {
+        //given
+        MedicalReport medicalReport1 = new MedicalReport(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주요 증상 테스트 작성1",
+                "확정 진단 테스트 작성1",
+                "진료 계획 테스트 작성1",
+                "추후 관리 테스트 작성1");
+        MedicalReport medicalReport2 = new MedicalReport(pet, vet,
+                LocalDate.of(2025, 11, 2),
+                "주요 증상 테스트 작성2",
+                "확정 진단 테스트 작성2",
+                "진료 계획 테스트 작성2",
+                "추후 관리 테스트 작성2");
+        MedicalReport medicalReport3 = new MedicalReport(pet, vet,
+                LocalDate.of(2025, 11, 3),
+                "주요 증상 테스트 작성3",
+                "확정 진단 테스트 작성3",
+                "진료 계획 테스트 작성3",
+                "추후 관리 테스트 작성3");
+        medicalReportRepository.save(medicalReport1);
+        medicalReportRepository.save(medicalReport2);
+        medicalReportRepository.save(medicalReport3);
+
+        //when
+        List<MedicalReport> medicalReports = medicalReportRepository.findByPet_PetId(pet.getPetId());
+
+        //then
+        assertThat(medicalReports).hasSize(3);
+        assertThat(medicalReports).allMatch(record ->
+                record.getPet().getPetId().equals(pet.getPetId()));
     }
 }
