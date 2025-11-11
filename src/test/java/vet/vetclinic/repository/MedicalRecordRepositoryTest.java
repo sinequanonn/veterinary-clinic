@@ -116,4 +116,33 @@ public class MedicalRecordRepositoryTest {
         assertThat(foundMedicalRecord.get().getAssessment()).isEqualTo(savedMedicalRecord.getAssessment());
         assertThat(foundMedicalRecord.get().getPlan()).isEqualTo(savedMedicalRecord.getPlan());
     }
+
+    @Test
+    void 진료기록을_수정한다() {
+        //given
+        MedicalRecord medicalRecord = new MedicalRecord(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주관적 판단 테스트 작성",
+                "객관적 판단 테스트 작성",
+                "확정 진단명 테스트 작성",
+                "진료 계획 테스트 작성");
+        MedicalRecord savedMedicalRecord = medicalRecordRepository.save(medicalRecord);
+
+        //when
+        MedicalRecord foundMedicalRecord = medicalRecordRepository.findById(savedMedicalRecord.getMedialRecordId()).orElseThrow();
+        foundMedicalRecord.updateMedicalRecord(
+                LocalDate.of(2025, 11, 11),
+                "주관적 판단 테스트 수정",
+                "객관적 판단 테스트 수정",
+                "확정 진단명 테스트 수정",
+                "진료 계획 테스트 수정");
+        MedicalRecord updatedMedicalRecord = medicalRecordRepository.findById(foundMedicalRecord.getMedialRecordId()).orElseThrow();
+
+        //then
+        assertThat(updatedMedicalRecord.getSubjective()).isEqualTo("주관적 판단 테스트 수정");
+        assertThat(updatedMedicalRecord.getObjective()).isEqualTo("객관적 판단 테스트 수정");
+        assertThat(updatedMedicalRecord.getAssessment()).isEqualTo("확정 진단명 테스트 수정");
+        assertThat(updatedMedicalRecord.getPlan()).isEqualTo("진료 계획 테스트 수정");
+    }
+
 }
