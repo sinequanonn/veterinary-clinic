@@ -12,6 +12,7 @@ import vet.vetclinic.domain.Vet;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -92,5 +93,25 @@ public class MedicalReportRepositoryTest {
         assertThat(medicalReports).hasSize(3);
         assertThat(medicalReports).allMatch(record ->
                 record.getPet().getPetId().equals(pet.getPetId()));
+    }
+
+    @Test
+    void 진료소견서번호로_하나의_진료_소견서를_조회한다() {
+        //given
+        MedicalReport medicalReport = new MedicalReport(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주요 증상 테스트 작성1",
+                "확정 진단 테스트 작성1",
+                "진료 계획 테스트 작성1",
+                "추후 관리 테스트 작성1");
+        MedicalReport savedMedicalReport = medicalReportRepository.save(medicalReport);
+
+        //when
+        Optional<MedicalReport> foundMedicalReport = medicalReportRepository.findById(savedMedicalReport.getMedicalReportId());
+
+        //then
+        assertThat(foundMedicalReport).isPresent();
+        assertThat(foundMedicalReport.get().getMedicalReportId()).isEqualTo(savedMedicalReport.getMedicalReportId());
+        assertThat(foundMedicalReport.get().getChiefComplaint()).isEqualTo(savedMedicalReport.getChiefComplaint());
     }
 }
