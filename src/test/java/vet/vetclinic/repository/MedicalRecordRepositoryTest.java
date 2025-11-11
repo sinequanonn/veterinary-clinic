@@ -145,4 +145,22 @@ public class MedicalRecordRepositoryTest {
         assertThat(updatedMedicalRecord.getPlan()).isEqualTo("진료 계획 테스트 수정");
     }
 
+    @Test
+    void 진료기록을_삭제한다() {
+        //given
+        MedicalRecord medicalRecord = new MedicalRecord(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주관적 판단 테스트 작성",
+                "객관적 판단 테스트 작성",
+                "확정 진단명 테스트 작성",
+                "진료 계획 테스트 작성");
+        MedicalRecord savedMedicalRecord = medicalRecordRepository.save(medicalRecord);
+
+        //when
+        medicalRecordRepository.deleteById(savedMedicalRecord.getMedialRecordId());
+
+        //then
+        Optional<MedicalRecord> foundMedicalRecord = medicalRecordRepository.findById(savedMedicalRecord.getMedialRecordId());
+        assertThat(foundMedicalRecord).isEmpty();
+    }
 }
