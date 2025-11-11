@@ -11,6 +11,7 @@ import vet.vetclinic.domain.Vet;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -95,11 +96,24 @@ public class MedicalRecordRepositoryTest {
     @Test
     void 진료기록번호로_진료기록을_상세_조회한다() {
         //given
-        MedicalRecord medicalRecord1 = new MedicalRecord(pet, vet,
+        MedicalRecord medicalRecord = new MedicalRecord(pet, vet,
                 LocalDate.of(2025, 11, 1),
-                "주관적 판단 테스트 작성1",
-                "객관적 판단 테스트 작성1",
-                "확정 진단명 테스트 작성1",
-                "진료 계획 테스트 작성1");
+                "주관적 판단 테스트 작성",
+                "객관적 판단 테스트 작성",
+                "확정 진단명 테스트 작성",
+                "진료 계획 테스트 작성");
+        MedicalRecord savedMedicalRecord = medicalRecordRepository.save(medicalRecord);
+
+        //when
+        Optional<MedicalRecord> foundMedicalRecord = medicalRecordRepository.findById(savedMedicalRecord.getMedialRecordId());
+
+        //then
+        assertThat(foundMedicalRecord).isPresent();
+        assertThat(foundMedicalRecord.get().getMedialRecordId()).isEqualTo(savedMedicalRecord.getMedialRecordId());
+        assertThat(foundMedicalRecord.get().getRecordDate()).isEqualTo(savedMedicalRecord.getRecordDate());
+        assertThat(foundMedicalRecord.get().getSubjective()).isEqualTo(savedMedicalRecord.getSubjective());
+        assertThat(foundMedicalRecord.get().getObjective()).isEqualTo(savedMedicalRecord.getObjective());
+        assertThat(foundMedicalRecord.get().getAssessment()).isEqualTo(savedMedicalRecord.getAssessment());
+        assertThat(foundMedicalRecord.get().getPlan()).isEqualTo(savedMedicalRecord.getPlan());
     }
 }
