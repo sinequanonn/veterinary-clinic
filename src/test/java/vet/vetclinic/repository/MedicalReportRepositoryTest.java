@@ -114,4 +114,33 @@ public class MedicalReportRepositoryTest {
         assertThat(foundMedicalReport.get().getMedicalReportId()).isEqualTo(savedMedicalReport.getMedicalReportId());
         assertThat(foundMedicalReport.get().getChiefComplaint()).isEqualTo(savedMedicalReport.getChiefComplaint());
     }
+
+    @Test
+    void 진료소견서를_수정한다() {
+        //given
+        MedicalReport medicalReport = new MedicalReport(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주요 증상 테스트 작성1",
+                "확정 진단 테스트 작성1",
+                "진료 계획 테스트 작성1",
+                "추후 관리 테스트 작성1");
+        MedicalReport savedMedicalReport = medicalReportRepository.save(medicalReport);
+
+        //when
+        MedicalReport foundMedicalReport = medicalReportRepository.findById(savedMedicalReport.getMedicalReportId()).orElseThrow();
+        foundMedicalReport.update(
+                LocalDate.of(2022, 11, 10),
+                "주요 증상 테스트 수정",
+                "확정 진단 테스트 수정",
+                "진료 계획 테스트 수정",
+                "추후 관리 테스트 수정");
+        MedicalReport updatedMedicalReport = medicalReportRepository.findById(foundMedicalReport.getMedicalReportId()).orElseThrow();
+
+        //then
+        assertThat(updatedMedicalReport.getReportDate()).isEqualTo(LocalDate.of(2022, 11, 10));
+        assertThat(updatedMedicalReport.getChiefComplaint()).isEqualTo("주요 증상 테스트 수정");
+        assertThat(updatedMedicalReport.getAssessment()).isEqualTo("확정 진단 테스트 수정");
+        assertThat(updatedMedicalReport.getPlan()).isEqualTo("진료 계획 테스트 수정");
+        assertThat(updatedMedicalReport.getPostoperativeCare()).isEqualTo("추후 관리 테스트 수정");
+    }
 }
