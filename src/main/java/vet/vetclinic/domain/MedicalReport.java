@@ -60,6 +60,14 @@ public class MedicalReport {
         this.postoperativeCare = postoperativeCare;
     }
 
+    public void update(LocalDate reportDate, String chiefComplaint, String assessment, String plan, String postoperativeCare) {
+        this.reportDate = reportDate;
+        this.chiefComplaint = chiefComplaint;
+        this.assessment = assessment;
+        this.plan = plan;
+        this.postoperativeCare = postoperativeCare;
+    }
+
     private void validatePostoperativeCare(String postoperativeCare) {
         if (postoperativeCare == null || postoperativeCare.isBlank()) {
             throw new IllegalArgumentException("추후 관리는 1자 이상 500자 이하여야 합니다.");
@@ -105,5 +113,4 @@ public class MedicalReport {
             throw new IllegalArgumentException("날짜는 오늘 이전 날짜여야 합니다.");
         }
     }
-
 }

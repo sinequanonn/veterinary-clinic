@@ -35,6 +35,9 @@ public class Pet {
     @OneToMany(mappedBy = "pet")
     List<MedicalRecord> medicalRecords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pet")
+    List<MedicalReport> medicalReports = new ArrayList<>();
+
     protected Pet() {
     }
 
@@ -45,6 +48,14 @@ public class Pet {
         validateWeight(weight);
         validateBirthDate(birthDate);
 
+        this.petName = petName;
+        this.ownerName = ownerName;
+        this.breed = breed;
+        this.weight = weight;
+        this.birthDate = birthDate;
+    }
+
+    public void updatePet(String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
         this.petName = petName;
         this.ownerName = ownerName;
         this.breed = breed;
