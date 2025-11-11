@@ -5,6 +5,6 @@ import vet.vetclinic.domain.MedicalRecord;
 
 import java.util.List;
 
-public interface MedicalRepository extends JpaRepository<MedicalRecord, Long> {
+public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
     List<MedicalRecord> findByPet_PetId(Long petPetId);
 }

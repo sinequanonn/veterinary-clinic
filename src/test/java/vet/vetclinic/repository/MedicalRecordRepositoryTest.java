@@ -1,7 +1,6 @@
 package vet.vetclinic.repository;
 
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class MedicalRecordRepositoryTest {
     @Autowired
-    private MedicalRepository medicalRepository;
+    private MedicalRecordRepository medicalRecordRepository;
 
     @Autowired
     private EntityManager entityManager;
@@ -45,7 +44,7 @@ public class MedicalRecordRepositoryTest {
         MedicalRecord medicalRecord = new MedicalRecord(pet, vet, date, subjective, objective, assessment, plan);
 
         //when
-        MedicalRecord savedRecord = medicalRepository.save(medicalRecord);
+        MedicalRecord savedRecord = medicalRecordRepository.save(medicalRecord);
 
         //then
         assertThat(savedRecord).isNotNull();
@@ -80,16 +79,27 @@ public class MedicalRecordRepositoryTest {
                 "객관적 판단 테스트 작성3",
                 "확정 진단명 테스트 작성3",
                 "진료 계획 테스트 작성3");
-        medicalRepository.save(medicalRecord1);
-        medicalRepository.save(medicalRecord2);
-        medicalRepository.save(medicalRecord3);
+        medicalRecordRepository.save(medicalRecord1);
+        medicalRecordRepository.save(medicalRecord2);
+        medicalRecordRepository.save(medicalRecord3);
 
         //when
-        List<MedicalRecord> medicalRecords = medicalRepository.findByPet_PetId((pet.getPetId()));
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findByPet_PetId((pet.getPetId()));
 
         //then
         assertThat(medicalRecords).hasSize(3);
         assertThat(medicalRecords).allMatch(record ->
                 record.getPet().getPetId().equals(pet.getPetId()));
+    }
+
+    @Test
+    void 진료기록번호로_진료기록을_상세_조회한다() {
+        //given
+        MedicalRecord medicalRecord1 = new MedicalRecord(pet, vet,
+                LocalDate.of(2025, 11, 1),
+                "주관적 판단 테스트 작성1",
+                "객관적 판단 테스트 작성1",
+                "확정 진단명 테스트 작성1",
+                "진료 계획 테스트 작성1");
     }
 }
