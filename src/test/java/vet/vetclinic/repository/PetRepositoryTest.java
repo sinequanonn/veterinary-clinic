@@ -77,4 +77,20 @@ public class PetRepositoryTest {
         assertThat(foundPet.get().getOwnerName()).isEqualTo("박진우");
         assertThat(foundPet.get().getBreed()).isEqualTo("말티즈");
     }
+
+    @Test
+    void 환자정보를_수정한다() {
+        //given
+        Pet savedPet = petRepository.save(new Pet("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2025, 11, 8)));
+
+        //when
+        Pet foundPet = petRepository.findById(savedPet.getPetId()).orElseThrow();
+        foundPet.updatePet("초코", "박진운", "리트리버", 3.7, LocalDate.of(2020, 11, 8));
+        Pet pet = petRepository.findById(foundPet.getPetId()).orElseThrow();
+
+        //then
+        assertThat(pet.getPetName()).isEqualTo("초코");
+        assertThat(pet.getOwnerName()).isEqualTo("박진운");
+        assertThat(pet.getBreed()).isEqualTo("리트리버");
+    }
 }
