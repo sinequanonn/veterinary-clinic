@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import vet.vetclinic.domain.Vet;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,5 +44,19 @@ public class VetRepositoryTest {
         assertThat(vets)
                 .extracting("vetName")
                 .containsExactly("박진우", "박진운", "김철수");
+    }
+
+    @Test
+    void 수의사번호로_한_명의_수의사를_조회한다() {
+        //given
+        Vet savedVet = vetRepository.save(new Vet("박진우"));
+
+        //when
+        Optional<Vet> foundVet = vetRepository.findById(savedVet.getVetId());
+
+        //then
+        assertThat(foundVet).isPresent();
+        assertThat(foundVet.get().getVetId()).isEqualTo(savedVet.getVetId());
+        assertThat(foundVet.get().getVetName()).isEqualTo(savedVet.getVetName());
     }
 }
