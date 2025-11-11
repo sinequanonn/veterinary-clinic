@@ -8,6 +8,7 @@ import vet.vetclinic.domain.Pet;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,5 +62,19 @@ public class PetRepositoryTest {
 
         //then
         assertThat(pets).isEmpty();
+    }
+
+    @Test
+    void 환자번호로_하나의_환자를_조회한다() {
+        //given
+        Pet savedPet = petRepository.save(new Pet("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2025, 11, 8)));
+
+        //when
+        Optional<Pet> foundPet = petRepository.findById(savedPet.getPetId());
+
+        //then
+        assertThat(foundPet.get().getPetName()).isEqualTo("뽀삐");
+        assertThat(foundPet.get().getOwnerName()).isEqualTo("박진우");
+        assertThat(foundPet.get().getBreed()).isEqualTo("말티즈");
     }
 }
