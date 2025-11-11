@@ -35,6 +35,9 @@ public class Pet {
     @OneToMany(mappedBy = "pet")
     List<MedicalRecord> medicalRecords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pet")
+    List<MedicalReport> medicalReports = new ArrayList<>();
+
     protected Pet() {
     }
 

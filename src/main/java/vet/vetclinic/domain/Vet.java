@@ -21,6 +21,9 @@ public class Vet {
     @OneToMany(mappedBy = "vet")
     List<MedicalRecord> medicalRecords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "vet")
+    List<MedicalReport> medicalReports = new ArrayList<>();
+
     protected Vet() {
     }
 
