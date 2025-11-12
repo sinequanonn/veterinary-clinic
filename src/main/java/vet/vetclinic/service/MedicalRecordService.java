@@ -11,7 +11,6 @@ import vet.vetclinic.repository.VetRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,10 +47,11 @@ public class MedicalRecordService {
     }
 
     @Transactional
-    public void update(Long recordId, LocalDate recordDate,
+    public MedicalRecord update(Long recordId, LocalDate recordDate,
                        String subjective, String objective, String assessment, String plan) {
         MedicalRecord foundMedicalRecord = findById(recordId);
         foundMedicalRecord.updateMedicalRecord(recordDate, subjective, objective, assessment, plan);
+        return foundMedicalRecord;
     }
 
     @Transactional
