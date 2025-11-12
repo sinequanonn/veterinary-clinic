@@ -46,10 +46,11 @@ public class MedicalReportService {
     }
 
     @Transactional
-    public void update(Long reportId, LocalDate reportDate,
+    public MedicalReport update(Long reportId, LocalDate reportDate,
                                 String chiefComplaint, String assessment, String plan, String postoperativeCare) {
         MedicalReport foundMedicalReport = findById(reportId);
         foundMedicalReport.update(reportDate, chiefComplaint, assessment, plan, postoperativeCare);
+        return foundMedicalReport;
     }
 
     @Transactional
