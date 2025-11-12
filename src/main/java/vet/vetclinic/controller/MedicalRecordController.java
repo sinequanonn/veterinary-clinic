@@ -41,4 +41,11 @@ public class MedicalRecordController {
                 .toList();
         return ResponseEntity.ok(responses);
     }
+
+    @GetMapping("/{recordId}")
+    public ResponseEntity<MedicalRecordResponse> findById(@PathVariable Long recordId) {
+        MedicalRecord record = medicalRecordService.findById(recordId);
+        MedicalRecordResponse response = MedicalRecordResponse.from(record);
+        return ResponseEntity.ok(response);
+    }
 }
