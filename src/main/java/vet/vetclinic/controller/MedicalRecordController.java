@@ -48,4 +48,20 @@ public class MedicalRecordController {
         MedicalRecordResponse response = MedicalRecordResponse.from(record);
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{recordId}")
+    public ResponseEntity<MedicalRecordResponse> update(
+            @PathVariable Long recordId,
+            @RequestBody MedicalRecordRequest request) {
+        MedicalRecord medicalRecord = medicalRecordService.update(
+                recordId,
+                request.getRecordDate(),
+                request.getSubjective(),
+                request.getObjective(),
+                request.getAssessment(),
+                request.getPlan()
+        );
+        MedicalRecordResponse response = MedicalRecordResponse.from(medicalRecord);
+        return ResponseEntity.ok(response);
+    }
 }
