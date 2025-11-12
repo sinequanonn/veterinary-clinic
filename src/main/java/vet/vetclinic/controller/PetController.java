@@ -47,4 +47,17 @@ public class PetController {
         PetResponse response = PetResponse.from(pet);
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{petId}")
+    public ResponseEntity<PetResponse> update(@PathVariable Long petId, @RequestBody PetRequest request) {
+        Pet pet = petService.update(
+                petId,
+                request.getPetName(),
+                request.getOwnerName(),
+                request.getBreed(),
+                request.getWeight(),
+                request.getBirthDate());
+        PetResponse response = PetResponse.from(pet);
+        return ResponseEntity.ok(response);
+    }
 }
