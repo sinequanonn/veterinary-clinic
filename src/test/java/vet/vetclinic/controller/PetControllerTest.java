@@ -15,8 +15,7 @@ import vet.vetclinic.service.PetService;
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,5 +75,26 @@ public class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.petId").value(pet.getPetId()))
                 .andExpect(jsonPath("$.petName").value("뽀삐"));
+    }
+
+    @Test
+    void 환자정보를_수정한다() throws Exception {
+        // given
+        Pet pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
+        PetRequest request = new PetRequest(
+                "초코",
+                "박진우",
+                "말티즈",
+                4.1,
+                LocalDate.of(2020, 5, 15)
+        );
+
+        //when&then
+        mockMvc.perform(put("/api/v1/pet/{petId}", pet.getPetId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.petName").value("초코"))
+                .andExpect(jsonPath("$.weight").value(4.1));
     }
 }
