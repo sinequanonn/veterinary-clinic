@@ -8,6 +8,9 @@ import vet.vetclinic.dto.VetRequest;
 import vet.vetclinic.dto.VetResponse;
 import vet.vetclinic.service.VetService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/vet")
 public class VetController {
@@ -22,5 +25,13 @@ public class VetController {
         Vet vet = vetService.register(request.getVetName());
         VetResponse response = VetResponse.from(vet);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<VetResponse>> findAll() {
+        List<VetResponse> responses = vetService.findAll().stream()
+                .map(VetResponse::from)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 }
