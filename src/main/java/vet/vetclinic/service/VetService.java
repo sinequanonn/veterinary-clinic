@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.Vet;
 import vet.vetclinic.repository.VetRepository;
 
+import java.util.List;
+
 @Service
 public class VetService {
     private final VetRepository vetRepository;
@@ -13,8 +15,13 @@ public class VetService {
         this.vetRepository = vetRepository;
     }
 
+    @Transactional
     public Vet register(String vetName) {
         Vet vet = new Vet(vetName);
         return vetRepository.save(vet);
+    }
+
+    public List<Vet> findAll() {
+        return vetRepository.findAll();
     }
 }
