@@ -63,4 +63,10 @@ public class MedicalReportController {
         MedicalReportResponse response = MedicalReportResponse.from(report);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{reportId}")
+    public ResponseEntity<Void> delete(@PathVariable Long reportId) {
+        medicalReportService.delete(reportId);
+        return ResponseEntity.noContent().build();
+    }
 }
