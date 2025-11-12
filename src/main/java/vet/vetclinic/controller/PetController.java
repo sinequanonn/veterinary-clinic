@@ -60,4 +60,10 @@ public class PetController {
         PetResponse response = PetResponse.from(pet);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{petId}")
+    public ResponseEntity<Void> delete(@PathVariable Long petId) {
+        petService.delete(petId);
+        return ResponseEntity.noContent().build();
+    }
 }
