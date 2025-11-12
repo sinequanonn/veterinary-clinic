@@ -8,12 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.VetRequest;
 import vet.vetclinic.service.VetService;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +26,8 @@ public class VetControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private VetService vetService;
 
     @Test
     void 수의사를_등록한다() throws Exception {
@@ -39,5 +41,19 @@ public class VetControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.vetId").exists())
                 .andExpect(jsonPath("$.vetName").value("박진우"));
+    }
+
+    @Test
+    void 모든_수의사를_조회한다() throws Exception {
+        //given
+        vetService.register("박진우");
+        vetService.register("박진웅");
+
+        //when&then
+        mockMvc.perform(get("/api/v1/vet"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].vetName").value("박진우"))
+                .andExpect(jsonPath("$[1].vetName").value("박진웅"));
     }
 }
