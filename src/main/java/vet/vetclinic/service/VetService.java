@@ -8,6 +8,7 @@ import vet.vetclinic.repository.VetRepository;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class VetService {
     private final VetRepository vetRepository;
 
