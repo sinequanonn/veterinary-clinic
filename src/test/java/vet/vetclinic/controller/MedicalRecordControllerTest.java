@@ -20,8 +20,7 @@ import vet.vetclinic.service.VetService;
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -101,5 +100,30 @@ public class MedicalRecordControllerTest {
                 .andExpect(jsonPath("$.petName").value("뽀삐"))
                 .andExpect(jsonPath("$.vetName").value("박진우"))
                 .andExpect(jsonPath("$.assessment").value("급성테스트1"));
+    }
+
+    @Test
+    void 진료기록을_수정한다() throws Exception {
+        //given
+        MedicalRecord medicalRecord = medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
+
+        MedicalRecordRequest medicalRecordRequest = new MedicalRecordRequest(
+                null, null, LocalDate.of(2025, 11, 8),
+                "기침증상",
+                "체온정상",
+                "급성테스트수정",
+                "약처방수정"
+        );
+
+        //when&then
+        mockMvc.perform(put("/api/v1/medical-records/{recordId}", medicalRecord.getMedialRecordId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(medicalRecordRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.recordDate").value("2025-11-08"))
+                .andExpect(jsonPath("$.subjective").value("기침증상"))
+                .andExpect(jsonPath("$.objective").value("체온정상"))
+                .andExpect(jsonPath("$.assessment").value("급성테스트수정"))
+                .andExpect(jsonPath("$.plan").value("약처방수정"));
     }
 }
