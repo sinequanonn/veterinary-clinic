@@ -2,14 +2,14 @@ package vet.vetclinic.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.domain.MedicalRecord;
 import vet.vetclinic.dto.MedicalRecordRequest;
 import vet.vetclinic.dto.MedicalRecordResponse;
 import vet.vetclinic.service.MedicalRecordService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/medical-records")
@@ -32,5 +32,13 @@ public class MedicalRecordController {
                 request.getPlan());
         MedicalRecordResponse response = MedicalRecordResponse.from(medicalRecord);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/pets/{petId}")
+    public ResponseEntity<List<MedicalRecordResponse>> findByPetId(@PathVariable Long petId) {
+        List<MedicalRecordResponse> responses = medicalRecordService.findByPetId(petId).stream()
+                .map(MedicalRecordResponse::from)
+                .toList();
+        return ResponseEntity.ok(responses);
     }
 }
