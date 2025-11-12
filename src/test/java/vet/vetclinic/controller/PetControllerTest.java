@@ -65,4 +65,16 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$[1].petName").value("나비"));
 
     }
+
+    @Test
+    void 환자번호로_하나의_환자를_상세_조회한다() throws Exception {
+        //given
+        Pet pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
+
+        //when&then
+        mockMvc.perform(get("/api/v1/pet/{petId}", pet.getPetId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.petId").value(pet.getPetId()))
+                .andExpect(jsonPath("$.petName").value("뽀삐"));
+    }
 }
