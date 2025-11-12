@@ -97,4 +97,14 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$.petName").value("초코"))
                 .andExpect(jsonPath("$.weight").value(4.1));
     }
+
+    @Test
+    void 환자정보를_삭제한다() throws Exception {
+        // given
+        Pet pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
+
+        // when & then
+        mockMvc.perform(delete("/api/v1/pet/{petId}", pet.getPetId()))
+                .andExpect(status().isNoContent());
+    }
 }
