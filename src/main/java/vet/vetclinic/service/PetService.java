@@ -33,9 +33,10 @@ public class PetService {
     }
 
     @Transactional
-    public void update(Long petId, String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
+    public Pet update(Long petId, String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
         Pet foundPet = findById(petId);
         foundPet.updatePet(petName, ownerName, breed, weight, birthDate);
+        return foundPet;
     }
 
     @Transactional
