@@ -9,14 +9,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import vet.vetclinic.domain.MedicalRecord;
 import vet.vetclinic.domain.Pet;
 import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.MedicalRecordRequest;
+import vet.vetclinic.service.MedicalRecordService;
 import vet.vetclinic.service.PetService;
 import vet.vetclinic.service.VetService;
 
 import java.time.LocalDate;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +33,7 @@ public class MedicalRecordControllerTest {
     @Autowired ObjectMapper objectMapper;
     @Autowired private VetService vetService;
     @Autowired private PetService petService;
+    @Autowired private MedicalRecordService medicalRecordService;
     private Pet pet;
     private Vet vet;
 
@@ -66,5 +71,21 @@ public class MedicalRecordControllerTest {
                 .andExpect(jsonPath("$.objective").value("체온 비정상"))
                 .andExpect(jsonPath("$.assessment").value("급성 테스트 작성"))
                 .andExpect(jsonPath("$.plan").value("수액처치"));
+    }
+
+    @Test
+    void 환자번호로_환자의_진료_기록_목록을_조회한다() throws Exception {
+        //given
+        medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
+        medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 8), "식욕부진2", "체온저하2", "급성테스트2", "수액2");
+        medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진3", "체온저하3", "급성테스트3", "수액3");
+
+        //when&then
+        mockMvc.perform(get("/api/v1/medical-records/pets/{petId}", pet.getPetId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].recordDate").value("2025-11-07"))
+                .andExpect(jsonPath("$[1].recordDate").value("2025-11-08"))
+                .andExpect(jsonPath("$[2].recordDate").value("2025-11-09"));
     }
 }
