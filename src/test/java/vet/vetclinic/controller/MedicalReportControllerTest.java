@@ -20,8 +20,7 @@ import vet.vetclinic.service.VetService;
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -102,5 +101,28 @@ public class MedicalReportControllerTest {
                 .andExpect(jsonPath("$.petName").value("뽀삐"))
                 .andExpect(jsonPath("$.vetName").value("박진우"))
                 .andExpect(jsonPath("$.assessment").value("식도염"));
+    }
+
+    @Test
+    void 진료소견서를_수정한다() throws Exception {
+        //given
+        MedicalReport medicalReport = medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
+        MedicalReportRequest request = new MedicalReportRequest(null, null,
+                LocalDate.of(2025, 11, 12),
+                "식욕부진, 구토 수정",
+                "식도염 수정",
+                "수액처치 및 약물 투여 수정",
+                "4일간 금식, 물만 제공");
+
+        //when&then
+        mockMvc.perform(put("/api/v1/medical-reports/{reportId}", medicalReport.getMedicalReportId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reportDate").value("2025-11-12"))
+                .andExpect(jsonPath("$.chiefComplaint").value("식욕부진, 구토 수정"))
+                .andExpect(jsonPath("$.assessment").value("식도염 수정"))
+                .andExpect(jsonPath("$.plan").value("수액처치 및 약물 투여 수정"))
+                .andExpect(jsonPath("$.postoperativeCare").value("4일간 금식, 물만 제공"));
     }
 }
