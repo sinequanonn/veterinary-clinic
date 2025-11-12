@@ -21,7 +21,16 @@ public class VetService {
         return vetRepository.save(vet);
     }
 
+    public Vet findById(Long vetId) {
+        return vetRepository.findById(vetId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 수의사입니다."));
+    }
+
     public List<Vet> findAll() {
         return vetRepository.findAll();
+    }
+
+    @Transactional
+    public void delete(Long vetId) {
+        vetRepository.deleteById(vetId);
     }
 }
