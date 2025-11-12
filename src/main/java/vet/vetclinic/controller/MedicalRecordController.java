@@ -64,4 +64,10 @@ public class MedicalRecordController {
         MedicalRecordResponse response = MedicalRecordResponse.from(medicalRecord);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{recordId}")
+    public ResponseEntity<Void> delete(@PathVariable Long recordId) {
+        medicalRecordService.delete(recordId);
+        return ResponseEntity.noContent().build();
+    }
 }
