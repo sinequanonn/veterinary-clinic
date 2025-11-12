@@ -126,4 +126,14 @@ public class MedicalRecordControllerTest {
                 .andExpect(jsonPath("$.assessment").value("급성테스트수정"))
                 .andExpect(jsonPath("$.plan").value("약처방수정"));
     }
+
+    @Test
+    void 진료기록을_삭제한다() throws Exception {
+        //given
+        MedicalRecord medicalRecord = medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
+
+        //when&then
+        mockMvc.perform(delete("/api/v1/medical-records/{recordId}", medicalRecord.getMedialRecordId()))
+                .andExpect(status().isNoContent());
+    }
 }
