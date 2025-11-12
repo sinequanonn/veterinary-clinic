@@ -125,4 +125,15 @@ public class MedicalReportControllerTest {
                 .andExpect(jsonPath("$.plan").value("수액처치 및 약물 투여 수정"))
                 .andExpect(jsonPath("$.postoperativeCare").value("4일간 금식, 물만 제공"));
     }
+
+    @Test
+    void 진료소견서를_삭제한다() throws Exception {
+        //given
+        MedicalReport medicalReport = medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
+
+        //when&then
+        mockMvc.perform(delete("/api/v1/medical-reports/{reportId}", medicalReport.getMedicalReportId()))
+                .andExpect(status().isNoContent());
+    }
+
 }
