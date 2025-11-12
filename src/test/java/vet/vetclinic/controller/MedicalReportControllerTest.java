@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import vet.vetclinic.domain.MedicalReport;
 import vet.vetclinic.domain.Pet;
 import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.MedicalReportRequest;
@@ -87,5 +88,19 @@ public class MedicalReportControllerTest {
                 .andExpect(jsonPath("$[0].reportDate").value("2025-11-09"))
                 .andExpect(jsonPath("$[1].reportDate").value("2025-11-10"))
                 .andExpect(jsonPath("$[2].reportDate").value("2025-11-11"));
+    }
+
+    @Test
+    void 진료소견서번호로_하나의_진료소견서를_조회한다() throws Exception {
+        //given
+        MedicalReport medicalReport = medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
+
+        // when & then
+        mockMvc.perform(get("/api/v1/medical-reports/{reportId}", medicalReport.getMedicalReportId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reportId").value(medicalReport.getMedicalReportId()))
+                .andExpect(jsonPath("$.petName").value("뽀삐"))
+                .andExpect(jsonPath("$.vetName").value("박진우"))
+                .andExpect(jsonPath("$.assessment").value("식도염"));
     }
 }
