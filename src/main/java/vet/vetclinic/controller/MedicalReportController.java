@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.domain.MedicalReport;
+import vet.vetclinic.dto.MedicalRecordResponse;
 import vet.vetclinic.dto.MedicalReportRequest;
 import vet.vetclinic.dto.MedicalReportResponse;
 import vet.vetclinic.service.MedicalReportService;
@@ -40,5 +41,12 @@ public class MedicalReportController {
                 .map(MedicalReportResponse::from)
                 .toList();
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{reportId}")
+    public ResponseEntity<MedicalReportResponse> findById(@PathVariable Long reportId) {
+        MedicalReport report = medicalReportService.findById(reportId);
+        MedicalReportResponse response = MedicalReportResponse.from(report);
+        return ResponseEntity.ok(response);
     }
 }
