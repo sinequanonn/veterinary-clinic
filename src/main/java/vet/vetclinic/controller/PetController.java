@@ -40,4 +40,11 @@ public class PetController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }
+
+    @GetMapping("/{petId}")
+    public ResponseEntity<PetResponse> findById(@PathVariable Long petId) {
+        Pet pet = petService.findById(petId);
+        PetResponse response = PetResponse.from(pet);
+        return ResponseEntity.ok(response);
+    }
 }
