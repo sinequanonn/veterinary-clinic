@@ -1,4 +1,4 @@
-package vet.vetclinic.dto;
+package vet.vetclinic.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

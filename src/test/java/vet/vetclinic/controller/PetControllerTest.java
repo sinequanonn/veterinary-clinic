@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.Pet;
-import vet.vetclinic.dto.PetRequest;
+import vet.vetclinic.dto.request.PetRequest;
 import vet.vetclinic.service.PetService;
 
 import java.time.LocalDate;

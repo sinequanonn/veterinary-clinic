@@ -4,12 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.domain.MedicalRecord;
-import vet.vetclinic.dto.MedicalRecordRequest;
-import vet.vetclinic.dto.MedicalRecordResponse;
+import vet.vetclinic.dto.request.MedicalRecordRequest;
+import vet.vetclinic.dto.response.MedicalRecordResponse;
 import vet.vetclinic.service.MedicalRecordService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/medical-records")

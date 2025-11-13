@@ -4,9 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.domain.MedicalReport;
-import vet.vetclinic.dto.MedicalRecordResponse;
-import vet.vetclinic.dto.MedicalReportRequest;
-import vet.vetclinic.dto.MedicalReportResponse;
+import vet.vetclinic.dto.request.MedicalReportRequest;
+import vet.vetclinic.dto.response.MedicalReportResponse;
 import vet.vetclinic.service.MedicalReportService;
 
 import java.util.List;

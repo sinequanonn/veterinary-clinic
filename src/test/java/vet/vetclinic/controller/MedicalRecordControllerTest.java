@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.MedicalRecord;
 import vet.vetclinic.domain.Pet;
 import vet.vetclinic.domain.Vet;
-import vet.vetclinic.dto.MedicalRecordRequest;
+import vet.vetclinic.dto.request.MedicalRecordRequest;
 import vet.vetclinic.service.MedicalRecordService;
 import vet.vetclinic.service.PetService;
 import vet.vetclinic.service.VetService;

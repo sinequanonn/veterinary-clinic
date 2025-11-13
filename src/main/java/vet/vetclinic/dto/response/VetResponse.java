@@ -1,4 +1,4 @@
-package vet.vetclinic.dto;
+package vet.vetclinic.dto.response;
 
 import lombok.Getter;
 import vet.vetclinic.domain.Vet;

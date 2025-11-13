@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.domain.Pet;
-import vet.vetclinic.dto.PetRequest;
-import vet.vetclinic.dto.PetResponse;
+import vet.vetclinic.dto.request.PetRequest;
+import vet.vetclinic.dto.response.PetResponse;
 import vet.vetclinic.service.PetService;
 
 import java.util.List;
