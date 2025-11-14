@@ -1,13 +1,13 @@
 package vet.vetclinic.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import vet.vetclinic.domain.Pet;
 
 import java.time.LocalDate;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class PetResponse {
     private Long petId;
     private String petName;
@@ -17,13 +17,13 @@ public class PetResponse {
     private LocalDate birthDate;
 
     public static PetResponse from(Pet pet) {
-        return new PetResponse(
-                pet.getPetId(),
-                pet.getPetName(),
-                pet.getOwnerName(),
-                pet.getBreed(),
-                pet.getWeight(),
-                pet.getBirthDate()
-        );
+        return PetResponse.builder()
+                .petId(pet.getPetId())
+                .petName(pet.getPetName())
+                .ownerName(pet.getOwnerName())
+                .breed(pet.getBreed())
+                .weight(pet.getWeight())
+                .birthDate(pet.getBirthDate())
+                .build();
     }
 }
