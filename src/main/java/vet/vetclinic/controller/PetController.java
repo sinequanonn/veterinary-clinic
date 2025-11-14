@@ -1,5 +1,6 @@
 package vet.vetclinic.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<PetResponse> createPet(@RequestBody PetCreateRequest request) {
+    public ResponseEntity<PetResponse> createPet(@RequestBody @Valid PetCreateRequest request) {
         PetResponse response = petService.createPet(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -38,7 +39,7 @@ public class PetController {
     }
 
     @PutMapping("/{petId}")
-    public ResponseEntity<PetResponse> updatePet(@PathVariable Long petId, @RequestBody PetUpdateRequest request) {
+    public ResponseEntity<PetResponse> updatePet(@PathVariable Long petId, @RequestBody @Valid PetUpdateRequest request) {
         PetResponse response = petService.updatePet(petId, request);
         return ResponseEntity.ok(response);
     }
