@@ -56,7 +56,7 @@
 - Controller와 Service에 dto 정적 팩토리 메서드 사용하도록 변경
   - [x] Vet
   - [x] Pet
-  - [ ] MedicalRecord
+  - [x] MedicalRecord
   - [ ] MedicalReport
 
 ---
