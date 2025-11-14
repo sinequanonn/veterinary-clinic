@@ -1,6 +1,8 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 public class Pet {
     private static final int MAX_NAME_LENGTH = 20;
     private static final double MIN_WEIGHT = 0;
@@ -32,9 +36,11 @@ public class Pet {
     @Column(nullable = false)
     private LocalDate birthDate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "pet")
     List<MedicalRecord> medicalRecords = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "pet")
     List<MedicalReport> medicalReports = new ArrayList<>();
 
