@@ -11,8 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.MedicalReport;
 import vet.vetclinic.domain.Pet;
-import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.request.MedicalReportRequest;
+import vet.vetclinic.dto.request.VetCreateRequest;
+import vet.vetclinic.dto.response.VetResponse;
 import vet.vetclinic.service.MedicalReportService;
 import vet.vetclinic.service.PetService;
 import vet.vetclinic.service.VetService;
@@ -35,12 +36,13 @@ public class MedicalReportControllerTest {
     @Autowired private MedicalReportService medicalReportService;
 
     private Pet pet;
-    private Vet vet;
+    private VetResponse vet;
 
     @BeforeEach
     void setUp() {
         pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
-        vet = vetService.register("박진우");
+        VetCreateRequest vetRequest = VetCreateRequest.builder().vetName("박진우").build();
+        vet = vetService.createVet(vetRequest);
     }
 
     @Test

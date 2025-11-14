@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import vet.vetclinic.dto.request.VetRequest;
+import vet.vetclinic.dto.request.VetCreateRequest;
 import vet.vetclinic.service.VetService;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -32,7 +32,7 @@ public class VetControllerTest {
     @Test
     void 수의사를_등록한다() throws Exception {
         //given
-        VetRequest request = new VetRequest("박진우");
+        VetCreateRequest request = VetCreateRequest.builder().vetName("박진우").build();
 
         //when&then
         mockMvc.perform(post("/api/v1/vet")
@@ -46,8 +46,8 @@ public class VetControllerTest {
     @Test
     void 모든_수의사를_조회한다() throws Exception {
         //given
-        vetService.register("박진우");
-        vetService.register("박진웅");
+        vetService.createVet(new VetCreateRequest("박진우"));
+        vetService.createVet(new VetCreateRequest("박진웅"));
 
         //when&then
         mockMvc.perform(get("/api/v1/vet"))

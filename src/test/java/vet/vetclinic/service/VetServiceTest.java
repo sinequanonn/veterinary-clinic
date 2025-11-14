@@ -1,12 +1,13 @@
 package vet.vetclinic.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import vet.vetclinic.domain.Vet;
+import vet.vetclinic.dto.request.VetCreateRequest;
+import vet.vetclinic.dto.response.VetResponse;
 import vet.vetclinic.repository.VetRepository;
 
 import java.util.List;
@@ -27,14 +28,15 @@ public class VetServiceTest {
     void 수의사는_회원가입을_한다() {
         //given
         String vetName = "박진우";
+        VetCreateRequest request = new VetCreateRequest(vetName);
         Vet vet = new Vet(vetName);
         when(vetRepository.save(any(Vet.class))).thenReturn(vet);
 
         //when
-        Vet registered = vetService.register(vetName);
+        VetResponse response = vetService.createVet(request);
 
         //then
-        assertThat(registered.getVetName()).isEqualTo(vetName);
+        assertThat(response.getVetName()).isEqualTo(vetName);
         verify(vetRepository, times(1)).save(any(Vet.class));
     }
 
@@ -48,7 +50,7 @@ public class VetServiceTest {
         when(vetRepository.findAll()).thenReturn(vets);
 
         //when
-        List<Vet> foundVets = vetService.findAll();
+        List<VetResponse> foundVets = vetService.findAll();
 
         //then
         assertThat(foundVets).hasSize(2);
