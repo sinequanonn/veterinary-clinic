@@ -1,12 +1,16 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 public class MedicalRecord {
     public static final int MAX_SUBJECTIVE_LENGTH = 500;
     public static final int MAX_OBJECTIVE_LENGTH = 500;
