@@ -1,19 +1,19 @@
 package vet.vetclinic.dto.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import vet.vetclinic.domain.Vet;
 
 @Getter
+@Builder
 public class VetResponse {
     private Long vetId;
     private String vetName;
 
-    private VetResponse(Long vetId, String vetName) {
-        this.vetId = vetId;
-        this.vetName = vetName;
-    }
-
     public static VetResponse from(Vet vet) {
-        return new VetResponse(vet.getVetId(), vet.getVetName());
+        return VetResponse.builder()
+                .vetId(vet.getVetId())
+                .vetName(vet.getVetName())
+                .build();
     }
 }
