@@ -9,11 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import vet.vetclinic.domain.MedicalRecord;
-import vet.vetclinic.domain.Pet;
-import vet.vetclinic.dto.request.MedicalRecordRequest;
+import vet.vetclinic.dto.request.MedicalRecordCreateRequest;
 import vet.vetclinic.dto.request.PetCreateRequest;
 import vet.vetclinic.dto.request.VetCreateRequest;
+import vet.vetclinic.dto.response.MedicalRecordResponse;
 import vet.vetclinic.dto.response.PetResponse;
 import vet.vetclinic.dto.response.VetResponse;
 import vet.vetclinic.service.MedicalRecordService;
@@ -49,7 +48,7 @@ public class MedicalRecordControllerTest {
     @Test
     void 수의사는_환자의_진료기록을_작성한다() throws Exception {
         //given
-        MedicalRecordRequest request = new MedicalRecordRequest(
+        MedicalRecordCreateRequest request = new MedicalRecordCreateRequest(
                 pet.getPetId(),
                 vet.getVetId(),
                 LocalDate.of(2025, 11, 10),
@@ -79,9 +78,9 @@ public class MedicalRecordControllerTest {
     @Test
     void 환자번호로_환자의_진료_기록_목록을_조회한다() throws Exception {
         //given
-        medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
-        medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 8), "식욕부진2", "체온저하2", "급성테스트2", "수액2");
-        medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진3", "체온저하3", "급성테스트3", "수액3");
+        medicalRecordService.createMedicalRecord(new MedicalRecordCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1"));
+        medicalRecordService.createMedicalRecord(new MedicalRecordCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 8), "식욕부진2", "체온저하2", "급성테스트2", "수액2"));
+        medicalRecordService.createMedicalRecord(new MedicalRecordCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진3", "체온저하3", "급성테스트3", "수액3"));
 
         //when&then
         mockMvc.perform(get("/api/v1/medical-records/pets/{petId}", pet.getPetId()))
@@ -95,12 +94,12 @@ public class MedicalRecordControllerTest {
     @Test
     void 진료기록번호로_진료기록을_조회한다() throws Exception {
         //given
-        MedicalRecord medicalRecord = medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
+        MedicalRecordResponse medicalRecord = medicalRecordService.createMedicalRecord(new MedicalRecordCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1"));
 
         //when&then
-        mockMvc.perform(get("/api/v1/medical-records/{recordId}", medicalRecord.getMedialRecordId()))
+        mockMvc.perform(get("/api/v1/medical-records/{recordId}", medicalRecord.getRecordId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.recordId").value(medicalRecord.getMedialRecordId()))
+                .andExpect(jsonPath("$.recordId").value(medicalRecord.getRecordId()))
                 .andExpect(jsonPath("$.petName").value("뽀삐"))
                 .andExpect(jsonPath("$.vetName").value("박진우"))
                 .andExpect(jsonPath("$.assessment").value("급성테스트1"));
@@ -109,9 +108,9 @@ public class MedicalRecordControllerTest {
     @Test
     void 진료기록을_수정한다() throws Exception {
         //given
-        MedicalRecord medicalRecord = medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
+        MedicalRecordResponse medicalRecord = medicalRecordService.createMedicalRecord(new MedicalRecordCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1"));
 
-        MedicalRecordRequest medicalRecordRequest = new MedicalRecordRequest(
+        MedicalRecordCreateRequest medicalRecordRequest = new MedicalRecordCreateRequest(
                 null, null, LocalDate.of(2025, 11, 8),
                 "기침증상",
                 "체온정상",
@@ -120,7 +119,7 @@ public class MedicalRecordControllerTest {
         );
 
         //when&then
-        mockMvc.perform(put("/api/v1/medical-records/{recordId}", medicalRecord.getMedialRecordId())
+        mockMvc.perform(put("/api/v1/medical-records/{recordId}", medicalRecord.getRecordId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(medicalRecordRequest)))
                 .andExpect(status().isOk())
@@ -134,10 +133,10 @@ public class MedicalRecordControllerTest {
     @Test
     void 진료기록을_삭제한다() throws Exception {
         //given
-        MedicalRecord medicalRecord = medicalRecordService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1");
+        MedicalRecordResponse medicalRecord = medicalRecordService.createMedicalRecord(new MedicalRecordCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 7), "식욕부진1", "체온저하1", "급성테스트1", "수액1"));
 
         //when&then
-        mockMvc.perform(delete("/api/v1/medical-records/{recordId}", medicalRecord.getMedialRecordId()))
+        mockMvc.perform(delete("/api/v1/medical-records/{recordId}", medicalRecord.getRecordId()))
                 .andExpect(status().isNoContent());
     }
 }
