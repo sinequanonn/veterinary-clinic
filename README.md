@@ -55,7 +55,7 @@
 - 검증을 API 앞에서 처리하도록 추가
 - Controller와 Service에 dto 정적 팩토리 메서드 사용하도록 변경
   - [x] Vet
-  - [ ] Pet
+  - [x] Pet
   - [ ] MedicalRecord
   - [ ] MedicalReport
 
