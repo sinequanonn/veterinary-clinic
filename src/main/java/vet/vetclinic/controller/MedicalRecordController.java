@@ -1,11 +1,13 @@
 package vet.vetclinic.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vet.vetclinic.domain.MedicalRecord;
-import vet.vetclinic.dto.request.MedicalRecordRequest;
+import vet.vetclinic.dto.request.MedicalRecordCreateRequest;
+import vet.vetclinic.dto.request.MedicalRecordUpdateRequest;
 import vet.vetclinic.dto.response.MedicalRecordResponse;
+import vet.vetclinic.dto.response.MedicalRecordListOfPetResponse;
 import vet.vetclinic.service.MedicalRecordService;
 
 import java.util.List;
@@ -20,53 +22,35 @@ public class MedicalRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<MedicalRecordResponse> create(@RequestBody MedicalRecordRequest request) {
-        MedicalRecord medicalRecord = medicalRecordService.create(
-                request.getVetId(),
-                request.getPetId(),
-                request.getRecordDate(),
-                request.getSubjective(),
-                request.getObjective(),
-                request.getAssessment(),
-                request.getPlan());
-        MedicalRecordResponse response = MedicalRecordResponse.from(medicalRecord);
+    public ResponseEntity<MedicalRecordResponse> createMedicalRecord(@RequestBody @Valid MedicalRecordCreateRequest request) {
+        MedicalRecordResponse response = medicalRecordService.createMedicalRecord(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/pets/{petId}")
-    public ResponseEntity<List<MedicalRecordResponse>> findByPetId(@PathVariable Long petId) {
-        List<MedicalRecordResponse> responses = medicalRecordService.findByPetId(petId).stream()
-                .map(MedicalRecordResponse::from)
-                .toList();
+    public ResponseEntity<List<MedicalRecordListOfPetResponse>> findByPetId(@PathVariable Long petId) {
+        List<MedicalRecordListOfPetResponse> responses = medicalRecordService.findByPetId(petId);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{recordId}")
     public ResponseEntity<MedicalRecordResponse> findById(@PathVariable Long recordId) {
-        MedicalRecord record = medicalRecordService.findById(recordId);
-        MedicalRecordResponse response = MedicalRecordResponse.from(record);
+        MedicalRecordResponse response = medicalRecordService.findById(recordId);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{recordId}")
-    public ResponseEntity<MedicalRecordResponse> update(
+    public ResponseEntity<MedicalRecordResponse> updateMedicalRecord(
             @PathVariable Long recordId,
-            @RequestBody MedicalRecordRequest request) {
-        MedicalRecord medicalRecord = medicalRecordService.update(
-                recordId,
-                request.getRecordDate(),
-                request.getSubjective(),
-                request.getObjective(),
-                request.getAssessment(),
-                request.getPlan()
-        );
-        MedicalRecordResponse response = MedicalRecordResponse.from(medicalRecord);
+            @RequestBody @Valid MedicalRecordUpdateRequest request) {
+        MedicalRecordResponse response = medicalRecordService.updateMedicalRecord(recordId, request);
+
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{recordId}")
-    public ResponseEntity<Void> delete(@PathVariable Long recordId) {
-        medicalRecordService.delete(recordId);
+    public ResponseEntity<Void> deleteMedicalRecord(@PathVariable Long recordId) {
+        medicalRecordService.deleteMedicalRecord(recordId);
         return ResponseEntity.noContent().build();
     }
 }
