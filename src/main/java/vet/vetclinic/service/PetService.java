@@ -3,9 +3,11 @@ package vet.vetclinic.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.Pet;
+import vet.vetclinic.dto.request.PetCreateRequest;
+import vet.vetclinic.dto.request.PetUpdateRequest;
+import vet.vetclinic.dto.response.PetResponse;
 import vet.vetclinic.repository.PetRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,29 +20,41 @@ public class PetService {
     }
 
     @Transactional
-    public Pet register(String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
-        Pet pet = new Pet(petName, ownerName, breed, weight, birthDate);
-        return petRepository.save(pet);
+    public PetResponse createPet(PetCreateRequest request) {
+        return PetResponse.from(petRepository.save(request.toEntity()));
     }
 
-    public Pet findById(Long petId) {
+    public PetResponse findById(Long petId) {
         return petRepository.findById(petId)
+                .map(PetResponse::from)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환자입니다."));
     }
 
-    public List<Pet> findAll() {
-        return petRepository.findAll();
+    public List<PetResponse> findAll() {
+        return petRepository.findAll().stream()
+                .map(PetResponse::from)
+                .toList();
     }
 
     @Transactional
-    public Pet update(Long petId, String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
-        Pet foundPet = findById(petId);
-        foundPet.updatePet(petName, ownerName, breed, weight, birthDate);
-        return foundPet;
+    public PetResponse updatePet(Long petId, PetUpdateRequest request) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환자입니다."));
+        pet.updatePet(
+                request.getPetName(),
+                request.getOwnerName(),
+                request.getBreed(),
+                request.getWeight(),
+                request.getBirthDate()
+        );
+        return PetResponse.from(pet);
     }
 
     @Transactional
-    public void delete(Long petId) {
+    public void deletePet(Long petId) {
+        if (!petRepository.existsById(petId)) {
+            throw new IllegalArgumentException("존재하지 않는 환자입니다.");
+        }
         petRepository.deleteById(petId);
     }
 }
