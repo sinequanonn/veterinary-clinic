@@ -11,14 +11,14 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 public class MedicalReportListOfPetResponse {
-    private Long recordId;
+    private Long reportId;
     private LocalDate reportDate;
     private String vetName;
     private String assessment;
 
     public static MedicalReportListOfPetResponse from(MedicalReport report) {
         return MedicalReportListOfPetResponse.builder()
-                .recordId(report.getMedicalReportId())
+                .reportId(report.getMedicalReportId())
                 .reportDate(report.getReportDate())
                 .vetName(report.getVet().getVetName())
                 .assessment(report.getAssessment())
