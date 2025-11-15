@@ -1,12 +1,16 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 public class MedicalReport {
     public static final int MAX_CHIEF_COMPLAINT_LENGTH = 300;
     public static final int MAX_ASSESSMENT_LENGTH = 300;
@@ -19,7 +23,6 @@ public class MedicalReport {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
-
     private Pet pet;
 
     @ManyToOne(fetch = FetchType.LAZY)
