@@ -10,10 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.MedicalReport;
-import vet.vetclinic.domain.Pet;
-import vet.vetclinic.dto.request.MedicalReportRequest;
+import vet.vetclinic.dto.request.MedicalReportCreateRequest;
 import vet.vetclinic.dto.request.PetCreateRequest;
 import vet.vetclinic.dto.request.VetCreateRequest;
+import vet.vetclinic.dto.response.MedicalReportResponse;
 import vet.vetclinic.dto.response.PetResponse;
 import vet.vetclinic.dto.response.VetResponse;
 import vet.vetclinic.service.MedicalReportService;
@@ -50,7 +50,7 @@ public class MedicalReportControllerTest {
     @Test
     void 진료소견서를_등록한다() throws Exception {
         //given
-        MedicalReportRequest request = new MedicalReportRequest(
+        MedicalReportCreateRequest request = new MedicalReportCreateRequest(
                 pet.getPetId(),
                 vet.getVetId(),
                 LocalDate.of(2025, 11, 10),
@@ -80,9 +80,9 @@ public class MedicalReportControllerTest {
     @Test
     void 환자의_진료소견서_목록을_조회한다() throws Exception {
         //given
-        medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
-        medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 10), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
-        medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 11), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
+        medicalReportService.createMedicalReport(new MedicalReportCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공"));
+        medicalReportService.createMedicalReport(new MedicalReportCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 10), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공"));
+        medicalReportService.createMedicalReport(new MedicalReportCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 11), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공"));
 
         //when&then
         mockMvc.perform(get("/api/v1/medical-reports/pets/{petId}", pet.getPetId()))
@@ -96,12 +96,12 @@ public class MedicalReportControllerTest {
     @Test
     void 진료소견서번호로_하나의_진료소견서를_조회한다() throws Exception {
         //given
-        MedicalReport medicalReport = medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
+        MedicalReportResponse medicalReport = medicalReportService.createMedicalReport(new MedicalReportCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공"));
 
         // when & then
-        mockMvc.perform(get("/api/v1/medical-reports/{reportId}", medicalReport.getMedicalReportId()))
+        mockMvc.perform(get("/api/v1/medical-reports/{reportId}", medicalReport.getReportId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.reportId").value(medicalReport.getMedicalReportId()))
+                .andExpect(jsonPath("$.reportId").value(medicalReport.getReportId()))
                 .andExpect(jsonPath("$.petName").value("뽀삐"))
                 .andExpect(jsonPath("$.vetName").value("박진우"))
                 .andExpect(jsonPath("$.assessment").value("식도염"));
@@ -110,8 +110,9 @@ public class MedicalReportControllerTest {
     @Test
     void 진료소견서를_수정한다() throws Exception {
         //given
-        MedicalReport medicalReport = medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
-        MedicalReportRequest request = new MedicalReportRequest(null, null,
+        MedicalReportResponse medicalReport = medicalReportService.createMedicalReport(
+                new MedicalReportCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공"));
+        MedicalReportCreateRequest request = new MedicalReportCreateRequest(null, null,
                 LocalDate.of(2025, 11, 12),
                 "식욕부진, 구토 수정",
                 "식도염 수정",
@@ -119,7 +120,7 @@ public class MedicalReportControllerTest {
                 "4일간 금식, 물만 제공");
 
         //when&then
-        mockMvc.perform(put("/api/v1/medical-reports/{reportId}", medicalReport.getMedicalReportId())
+        mockMvc.perform(put("/api/v1/medical-reports/{reportId}", medicalReport.getReportId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -133,10 +134,11 @@ public class MedicalReportControllerTest {
     @Test
     void 진료소견서를_삭제한다() throws Exception {
         //given
-        MedicalReport medicalReport = medicalReportService.create(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공");
+        MedicalReportResponse medicalReport = medicalReportService.createMedicalReport(
+                new MedicalReportCreateRequest(pet.getPetId(), vet.getVetId(), LocalDate.of(2025, 11, 9), "식욕부진, 구토", "식도염", "수액처치 및 약물 투여", "3일간 금식, 물만 제공"));
 
         //when&then
-        mockMvc.perform(delete("/api/v1/medical-reports/{reportId}", medicalReport.getMedicalReportId()))
+        mockMvc.perform(delete("/api/v1/medical-reports/{reportId}", medicalReport.getReportId()))
                 .andExpect(status().isNoContent());
     }
 
