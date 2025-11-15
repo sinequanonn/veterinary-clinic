@@ -37,13 +37,7 @@ public class PetControllerTest {
     @Test
     void 환자를_등록한다() throws Exception {
         //given
-        PetCreateRequest request = PetCreateRequest.builder()
-                .petName("뽀삐")
-                .ownerName("박진우")
-                .breed("말티즈")
-                .weight(3.5)
-                .birthDate(LocalDate.of(2025, 11, 8))
-                .build();
+        PetCreateRequest request = new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
 
         //when&then
         mockMvc.perform(post("/api/v1/pet")
@@ -55,7 +49,7 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$.ownerName").value("박진우"))
                 .andExpect(jsonPath("$.breed").value("말티즈"))
                 .andExpect(jsonPath("$.weight").value(3.5))
-                .andExpect(jsonPath("$.birthDate").value("2025-11-08"));
+                .andExpect(jsonPath("$.birthDate").value("2020-05-15"));
     }
 
     @Test

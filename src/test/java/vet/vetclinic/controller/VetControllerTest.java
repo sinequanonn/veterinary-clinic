@@ -32,7 +32,7 @@ public class VetControllerTest {
     @Test
     void 수의사를_등록한다() throws Exception {
         //given
-        VetCreateRequest request = VetCreateRequest.builder().vetName("박진우").build();
+        VetCreateRequest request = new VetCreateRequest("박진우");
 
         //when&then
         mockMvc.perform(post("/api/v1/vet")

@@ -43,7 +43,7 @@ public class MedicalReportControllerTest {
     @BeforeEach
     void setUp() {
         pet = petService.createPet(new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15)));
-        VetCreateRequest vetRequest = VetCreateRequest.builder().vetName("박진우").build();
+        VetCreateRequest vetRequest = new VetCreateRequest("박진우");
         vet = vetService.createVet(vetRequest);
     }
 
