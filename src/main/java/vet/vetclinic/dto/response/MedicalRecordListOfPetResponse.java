@@ -1,6 +1,5 @@
 package vet.vetclinic.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import vet.vetclinic.domain.MedicalRecord;
@@ -9,7 +8,6 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor
 public class MedicalRecordListOfPetResponse {
     private Long recordId;
     private LocalDate recordDate;
