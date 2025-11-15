@@ -9,7 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.Pet;
-import vet.vetclinic.dto.PetRequest;
+import vet.vetclinic.dto.request.PetCreateRequest;
+import vet.vetclinic.dto.request.PetUpdateRequest;
+import vet.vetclinic.dto.response.PetResponse;
 import vet.vetclinic.service.PetService;
 
 import java.time.LocalDate;
@@ -35,7 +37,7 @@ public class PetControllerTest {
     @Test
     void 환자를_등록한다() throws Exception {
         //given
-        PetRequest request = new PetRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2025, 11, 8));
+        PetCreateRequest request = new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
 
         //when&then
         mockMvc.perform(post("/api/v1/pet")
@@ -47,14 +49,14 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$.ownerName").value("박진우"))
                 .andExpect(jsonPath("$.breed").value("말티즈"))
                 .andExpect(jsonPath("$.weight").value(3.5))
-                .andExpect(jsonPath("$.birthDate").value("2025-11-08"));
+                .andExpect(jsonPath("$.birthDate").value("2020-05-15"));
     }
 
     @Test
     void 모든_환자를_조회한다() throws Exception {
         // given
-        petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
-        petService.register("나비", "박진웅", "웰시코기", 4.2, LocalDate.of(2019, 3, 20));
+        petService.createPet(new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15)));
+        petService.createPet(new PetCreateRequest("나비", "박진웅", "웰시코기", 4.2, LocalDate.of(2019, 3, 20)));
 
         //when&then
         mockMvc.perform(get("/api/v1/pet"))
@@ -68,20 +70,20 @@ public class PetControllerTest {
     @Test
     void 환자번호로_하나의_환자를_상세_조회한다() throws Exception {
         //given
-        Pet pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
+        PetResponse response = petService.createPet(new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15)));
 
         //when&then
-        mockMvc.perform(get("/api/v1/pet/{petId}", pet.getPetId()))
+        mockMvc.perform(get("/api/v1/pet/{petId}", response.getPetId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.petId").value(pet.getPetId()))
+                .andExpect(jsonPath("$.petId").value(response.getPetId()))
                 .andExpect(jsonPath("$.petName").value("뽀삐"));
     }
 
     @Test
     void 환자정보를_수정한다() throws Exception {
         // given
-        Pet pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
-        PetRequest request = new PetRequest(
+        PetResponse response = petService.createPet(new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15)));;
+        PetUpdateRequest request = new PetUpdateRequest(
                 "초코",
                 "박진우",
                 "말티즈",
@@ -90,7 +92,7 @@ public class PetControllerTest {
         );
 
         //when&then
-        mockMvc.perform(put("/api/v1/pet/{petId}", pet.getPetId())
+        mockMvc.perform(put("/api/v1/pet/{petId}", response.getPetId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -101,10 +103,10 @@ public class PetControllerTest {
     @Test
     void 환자정보를_삭제한다() throws Exception {
         // given
-        Pet pet = petService.register("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15));
+        PetResponse response = petService.createPet(new PetCreateRequest("뽀삐", "박진우", "말티즈", 3.5, LocalDate.of(2020, 5, 15)));;
 
         // when & then
-        mockMvc.perform(delete("/api/v1/pet/{petId}", pet.getPetId()))
+        mockMvc.perform(delete("/api/v1/pet/{petId}", response.getPetId()))
                 .andExpect(status().isNoContent());
     }
 }

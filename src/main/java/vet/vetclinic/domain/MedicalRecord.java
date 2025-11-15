@@ -1,12 +1,13 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalRecord {
     public static final int MAX_SUBJECTIVE_LENGTH = 500;
     public static final int MAX_OBJECTIVE_LENGTH = 500;
@@ -40,9 +41,7 @@ public class MedicalRecord {
     @Column(nullable = false)
     private String plan;
 
-    protected MedicalRecord() {
-    }
-
+    @Builder
     public MedicalRecord(Pet pet, Vet vet, LocalDate recordDate, String subjective, String objective, String assessment, String plan) {
         validateRecordDate(recordDate);
         validateSubjective(subjective);

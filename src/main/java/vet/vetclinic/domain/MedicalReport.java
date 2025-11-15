@@ -1,12 +1,13 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalReport {
     public static final int MAX_CHIEF_COMPLAINT_LENGTH = 300;
     public static final int MAX_ASSESSMENT_LENGTH = 300;
@@ -19,7 +20,6 @@ public class MedicalReport {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
-
     private Pet pet;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,9 +41,7 @@ public class MedicalReport {
     @Column(nullable = false)
     private String postoperativeCare;
 
-    protected MedicalReport() {
-    }
-
+    @Builder
     public MedicalReport(Pet pet, Vet vet, LocalDate reportDate, String chiefComplaint, String assessment, String plan, String postoperativeCare) {
         validateReportDate(reportDate);
         validateChiefComplaint(chiefComplaint);

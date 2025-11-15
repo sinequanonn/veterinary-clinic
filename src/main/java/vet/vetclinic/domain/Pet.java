@@ -1,14 +1,15 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pet {
     private static final int MAX_NAME_LENGTH = 20;
     private static final double MIN_WEIGHT = 0;
@@ -38,9 +39,7 @@ public class Pet {
     @OneToMany(mappedBy = "pet")
     List<MedicalReport> medicalReports = new ArrayList<>();
 
-    protected Pet() {
-    }
-
+    @Builder
     public Pet(String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
         validatePetName(petName);
         validateOwnerName(ownerName);

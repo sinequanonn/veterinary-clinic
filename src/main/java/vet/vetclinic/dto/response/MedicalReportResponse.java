@@ -1,13 +1,13 @@
-package vet.vetclinic.dto;
+package vet.vetclinic.dto.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import vet.vetclinic.domain.MedicalReport;
 
 import java.time.LocalDate;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class MedicalReportResponse {
     private Long reportId;
     private Long petId;

@@ -1,13 +1,14 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vet {
     private static final int MAX_NAME_LENGTH = 20;
 
@@ -24,9 +25,7 @@ public class Vet {
     @OneToMany(mappedBy = "vet")
     List<MedicalReport> medicalReports = new ArrayList<>();
 
-    protected Vet() {
-    }
-
+    @Builder
     public Vet(String vetName) {
         validateVetName(vetName);
         this.vetName = vetName;
