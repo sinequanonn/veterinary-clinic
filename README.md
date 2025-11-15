@@ -57,7 +57,7 @@
   - [x] Vet
   - [x] Pet
   - [x] MedicalRecord
-  - [ ] MedicalReport
+  - [x] MedicalReport
 
 ---
 
