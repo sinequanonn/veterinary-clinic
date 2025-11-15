@@ -12,7 +12,6 @@ public class VetCreateRequest {
     @Size(min = 1, max = 20, message = "수의사명은 1자 이상 20자 이하여야 합니다.")
     private String vetName;
 
-    @Builder
     public VetCreateRequest(String vetName) {
         this.vetName = vetName;
     }

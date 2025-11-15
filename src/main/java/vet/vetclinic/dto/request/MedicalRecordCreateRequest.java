@@ -12,7 +12,6 @@ import vet.vetclinic.domain.Vet;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalRecordCreateRequest {

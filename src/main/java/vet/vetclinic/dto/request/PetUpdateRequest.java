@@ -1,14 +1,12 @@
 package vet.vetclinic.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PetUpdateRequest {
     @NotBlank
@@ -30,13 +28,4 @@ public class PetUpdateRequest {
     @NotNull
     @PastOrPresent(message = "날짜는 오늘 이전 날짜여야 합니다.")
     private LocalDate birthDate;
-
-    @Builder
-    public PetUpdateRequest(String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
-        this.petName = petName;
-        this.ownerName = ownerName;
-        this.breed = breed;
-        this.weight = weight;
-        this.birthDate = birthDate;
-    }
 }

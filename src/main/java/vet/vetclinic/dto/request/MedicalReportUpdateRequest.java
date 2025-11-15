@@ -9,7 +9,6 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalReportUpdateRequest {
@@ -26,7 +25,7 @@ public class MedicalReportUpdateRequest {
     private String assessment;
 
     @NotBlank
-    @Size(min = 1, max = 500, message = "진료 계획은 500자 이하여야 합니다.")
+    @Size(min = 1, max = 500, message = "진료 계획은 1자 이상 500자 이하여야 합니다.")
     private String plan;
 
     @NotBlank

@@ -7,6 +7,7 @@ import vet.vetclinic.domain.Pet;
 import java.time.LocalDate;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PetCreateRequest {
     @NotBlank
@@ -28,15 +29,6 @@ public class PetCreateRequest {
     @NotNull
     @PastOrPresent(message = "날짜는 오늘 이전 날짜여야 합니다.")
     private LocalDate birthDate;
-
-    @Builder
-    public PetCreateRequest(String petName, String ownerName, String breed, double weight, LocalDate birthDate) {
-        this.petName = petName;
-        this.ownerName = ownerName;
-        this.breed = breed;
-        this.weight = weight;
-        this.birthDate = birthDate;
-    }
 
     public Pet toEntity() {
         return Pet.builder()
