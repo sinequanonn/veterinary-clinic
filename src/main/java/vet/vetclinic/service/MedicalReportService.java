@@ -5,11 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.MedicalReport;
 import vet.vetclinic.domain.Pet;
 import vet.vetclinic.domain.Vet;
+import vet.vetclinic.dto.request.MedicalReportCreateRequest;
+import vet.vetclinic.dto.request.MedicalReportUpdateRequest;
+import vet.vetclinic.dto.response.MedicalReportListOfPetResponse;
+import vet.vetclinic.dto.response.MedicalReportResponse;
 import vet.vetclinic.repository.MedicalReportRepository;
 import vet.vetclinic.repository.PetRepository;
 import vet.vetclinic.repository.VetRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,35 +29,47 @@ public class MedicalReportService {
     }
 
     @Transactional
-    public MedicalReport create(Long petId, Long vetId, LocalDate reportDate,
-                                String chiefComplaint, String assessment, String plan, String postoperativeCare) {
-        Pet pet = petRepository.findById(petId)
+    public MedicalReportResponse createMedicalReport(MedicalReportCreateRequest request) {
+        Pet pet = petRepository.findById(request.getPetId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환자입니다."));
-        Vet vet = vetRepository.findById(vetId)
+        Vet vet = vetRepository.findById(request.getVetId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 수의사입니다."));
-        MedicalReport medicalReport = new MedicalReport(pet, vet, reportDate, chiefComplaint, assessment, plan, postoperativeCare);
-        return medicalReportRepository.save(medicalReport);
+
+        return MedicalReportResponse.from(medicalReportRepository.save(request.toEntity(pet, vet)));
     }
 
-    public MedicalReport findById(Long reportId) {
+    public MedicalReportResponse findById(Long reportId) {
         return medicalReportRepository.findById(reportId)
+                .map(MedicalReportResponse::from)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 진료 소견서입니다."));
     }
 
-    public List<MedicalReport> findByPetId(Long petId) {
-        return medicalReportRepository.findByPet_PetId(petId);
+    public List<MedicalReportListOfPetResponse> findByPetId(Long petId) {
+        return medicalReportRepository.findByPet_PetId(petId).stream()
+                .map(MedicalReportListOfPetResponse::from)
+                .toList();
     }
 
     @Transactional
-    public MedicalReport update(Long reportId, LocalDate reportDate,
-                                String chiefComplaint, String assessment, String plan, String postoperativeCare) {
-        MedicalReport foundMedicalReport = findById(reportId);
-        foundMedicalReport.update(reportDate, chiefComplaint, assessment, plan, postoperativeCare);
-        return foundMedicalReport;
+    public MedicalReportResponse updateMedicalReport(Long reportId, MedicalReportUpdateRequest request) {
+        MedicalReport medicalReport = medicalReportRepository.findById(reportId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 진료 소견서입니다."));
+
+        medicalReport.update(
+                request.getReportDate(),
+                request.getChiefComplaint(),
+                request.getAssessment(),
+                request.getPlan(),
+                request.getPostoperativeCare());
+
+        return MedicalReportResponse.from(medicalReport);
     }
 
     @Transactional
-    public void delete(Long reportId) {
+    public void deleteMedicalReport(Long reportId) {
+        if (!medicalReportRepository.existsById(reportId)) {
+            throw new IllegalArgumentException("존재하지 않는 진료 소견서입니다.");
+        }
         medicalReportRepository.deleteById(reportId);
     }
 
