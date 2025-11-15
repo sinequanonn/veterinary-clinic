@@ -11,10 +11,10 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 public class MedicalRecordListOfPetResponse {
-    Long recordId;
-    LocalDate recordDate;
-    String petName;
-    String assessment;
+    private Long recordId;
+    private LocalDate recordDate;
+    private String petName;
+    private String assessment;
 
     public static MedicalRecordListOfPetResponse from(MedicalRecord record) {
         return MedicalRecordListOfPetResponse.builder()
