@@ -1,17 +1,14 @@
 package vet.vetclinic.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Builder
 @Entity
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vet {
     private static final int MAX_NAME_LENGTH = 20;
 
@@ -22,17 +19,13 @@ public class Vet {
     @Column(nullable = false, length=MAX_NAME_LENGTH)
     private String vetName;
 
-    @Builder.Default
     @OneToMany(mappedBy = "vet")
     List<MedicalRecord> medicalRecords = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "vet")
     List<MedicalReport> medicalReports = new ArrayList<>();
 
-    protected Vet() {
-    }
-
+    @Builder
     public Vet(String vetName) {
         validateVetName(vetName);
         this.vetName = vetName;
