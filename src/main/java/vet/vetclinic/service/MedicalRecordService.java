@@ -8,7 +8,7 @@ import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.request.MedicalRecordCreateRequest;
 import vet.vetclinic.dto.request.MedicalRecordUpdateRequest;
 import vet.vetclinic.dto.response.MedicalRecordResponse;
-import vet.vetclinic.dto.response.MedicalRecordListOfPetResponse;
+import vet.vetclinic.dto.response.MedicalRecordOfPetResponse;
 import vet.vetclinic.repository.MedicalRecordRepository;
 import vet.vetclinic.repository.PetRepository;
 import vet.vetclinic.repository.VetRepository;
@@ -44,11 +44,11 @@ public class MedicalRecordService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 진료 기록입니다."));
     }
 
-    public List<MedicalRecordListOfPetResponse> findByPetId(Long petId) {
+    public List<MedicalRecordOfPetResponse> findByPetId(Long petId) {
         List<MedicalRecord> records = medicalRecordRepository.findByPet_PetId(petId);
 
         return records.stream()
-                .map(MedicalRecordListOfPetResponse::from)
+                .map(MedicalRecordOfPetResponse::from)
                 .toList();
     }
 

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.dto.request.MedicalRecordCreateRequest;
 import vet.vetclinic.dto.request.MedicalRecordUpdateRequest;
 import vet.vetclinic.dto.response.MedicalRecordResponse;
-import vet.vetclinic.dto.response.MedicalRecordListOfPetResponse;
+import vet.vetclinic.dto.response.MedicalRecordOfPetResponse;
 import vet.vetclinic.service.MedicalRecordService;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public class MedicalRecordController {
     }
 
     @GetMapping("/pets/{petId}")
-    public ResponseEntity<List<MedicalRecordListOfPetResponse>> findByPetId(@PathVariable Long petId) {
-        List<MedicalRecordListOfPetResponse> responses = medicalRecordService.findByPetId(petId);
+    public ResponseEntity<List<MedicalRecordOfPetResponse>> findByPetId(@PathVariable Long petId) {
+        List<MedicalRecordOfPetResponse> responses = medicalRecordService.findByPetId(petId);
         return ResponseEntity.ok(responses);
     }
 

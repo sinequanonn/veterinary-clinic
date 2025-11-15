@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vet.vetclinic.dto.request.MedicalReportCreateRequest;
 import vet.vetclinic.dto.request.MedicalReportUpdateRequest;
-import vet.vetclinic.dto.response.MedicalReportListOfPetResponse;
+import vet.vetclinic.dto.response.MedicalReportOfPetResponse;
 import vet.vetclinic.dto.response.MedicalReportResponse;
 import vet.vetclinic.service.MedicalReportService;
 
@@ -37,8 +37,8 @@ public class MedicalReportController {
     }
 
     @GetMapping("/pets/{petId}")
-    public ResponseEntity<List<MedicalReportListOfPetResponse>> findByPetId(@PathVariable Long petId) {
-        List<MedicalReportListOfPetResponse> responses = medicalReportService.findByPetId(petId);
+    public ResponseEntity<List<MedicalReportOfPetResponse>> findByPetId(@PathVariable Long petId) {
+        List<MedicalReportOfPetResponse> responses = medicalReportService.findByPetId(petId);
         return ResponseEntity.ok(responses);
     }
 

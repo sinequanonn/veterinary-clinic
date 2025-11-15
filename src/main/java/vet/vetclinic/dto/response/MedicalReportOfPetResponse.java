@@ -8,14 +8,14 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class MedicalReportListOfPetResponse {
+public class MedicalReportOfPetResponse {
     private Long reportId;
     private LocalDate reportDate;
     private String vetName;
     private String assessment;
 
-    public static MedicalReportListOfPetResponse from(MedicalReport report) {
-        return MedicalReportListOfPetResponse.builder()
+    public static MedicalReportOfPetResponse from(MedicalReport report) {
+        return MedicalReportOfPetResponse.builder()
                 .reportId(report.getMedicalReportId())
                 .reportDate(report.getReportDate())
                 .vetName(report.getVet().getVetName())

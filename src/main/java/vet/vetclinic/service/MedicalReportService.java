@@ -7,7 +7,7 @@ import vet.vetclinic.domain.Pet;
 import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.request.MedicalReportCreateRequest;
 import vet.vetclinic.dto.request.MedicalReportUpdateRequest;
-import vet.vetclinic.dto.response.MedicalReportListOfPetResponse;
+import vet.vetclinic.dto.response.MedicalReportOfPetResponse;
 import vet.vetclinic.dto.response.MedicalReportResponse;
 import vet.vetclinic.repository.MedicalReportRepository;
 import vet.vetclinic.repository.PetRepository;
@@ -44,9 +44,9 @@ public class MedicalReportService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 진료 소견서입니다."));
     }
 
-    public List<MedicalReportListOfPetResponse> findByPetId(Long petId) {
+    public List<MedicalReportOfPetResponse> findByPetId(Long petId) {
         return medicalReportRepository.findByPet_PetId(petId).stream()
-                .map(MedicalReportListOfPetResponse::from)
+                .map(MedicalReportOfPetResponse::from)
                 .toList();
     }
 
