@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 import vet.vetclinic.domain.Vet;
 import vet.vetclinic.dto.request.VetCreateRequest;
 import vet.vetclinic.dto.response.VetResponse;
+import vet.vetclinic.exception.BusinessException;
+import vet.vetclinic.exception.ErrorCode;
 import vet.vetclinic.repository.VetRepository;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class VetService {
     public VetResponse findById(Long vetId) {
         return vetRepository.findById(vetId)
                 .map(VetResponse::from)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 수의사입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.VET404));
     }
 
     public List<VetResponse> findAll() {

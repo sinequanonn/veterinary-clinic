@@ -9,6 +9,8 @@ import vet.vetclinic.dto.request.MedicalRecordCreateRequest;
 import vet.vetclinic.dto.request.MedicalRecordUpdateRequest;
 import vet.vetclinic.dto.response.MedicalRecordResponse;
 import vet.vetclinic.dto.response.MedicalRecordOfPetResponse;
+import vet.vetclinic.exception.BusinessException;
+import vet.vetclinic.exception.ErrorCode;
 import vet.vetclinic.repository.MedicalRecordRepository;
 import vet.vetclinic.repository.PetRepository;
 import vet.vetclinic.repository.VetRepository;
@@ -31,9 +33,9 @@ public class MedicalRecordService {
     @Transactional
     public MedicalRecordResponse createMedicalRecord(MedicalRecordCreateRequest request) {
         Pet pet = petRepository.findById(request.getPetId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환자입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET404));
         Vet vet = vetRepository.findById(request.getVetId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 수의사입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.VET404));
 
         return MedicalRecordResponse.from(medicalRecordRepository.save(request.toEntity(pet, vet)));
     }
@@ -41,7 +43,7 @@ public class MedicalRecordService {
     public MedicalRecordResponse findById(Long recordId) {
         return medicalRecordRepository.findById(recordId)
                 .map(MedicalRecordResponse::from)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 진료 기록입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.REC404));
     }
 
     public List<MedicalRecordOfPetResponse> findByPetId(Long petId) {
@@ -55,7 +57,7 @@ public class MedicalRecordService {
     @Transactional
     public MedicalRecordResponse updateMedicalRecord(Long recordId, MedicalRecordUpdateRequest request) {
         MedicalRecord medicalRecord = medicalRecordRepository.findById(recordId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 진료 기록입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.REC404));
 
         medicalRecord.updateMedicalRecord(
                 request.getRecordDate(),
@@ -71,7 +73,7 @@ public class MedicalRecordService {
     @Transactional
     public void deleteMedicalRecord(Long recordId) {
         if (!medicalRecordRepository.existsById(recordId)) {
-            throw new IllegalArgumentException("존재하지 않는 진료 기록입니다.");
+            throw new BusinessException(ErrorCode.REC404);
         }
         medicalRecordRepository.deleteById(recordId);
     }

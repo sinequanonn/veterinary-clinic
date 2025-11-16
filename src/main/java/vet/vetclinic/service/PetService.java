@@ -6,6 +6,8 @@ import vet.vetclinic.domain.Pet;
 import vet.vetclinic.dto.request.PetCreateRequest;
 import vet.vetclinic.dto.request.PetUpdateRequest;
 import vet.vetclinic.dto.response.PetResponse;
+import vet.vetclinic.exception.BusinessException;
+import vet.vetclinic.exception.ErrorCode;
 import vet.vetclinic.repository.PetRepository;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class PetService {
     public PetResponse findById(Long petId) {
         return petRepository.findById(petId)
                 .map(PetResponse::from)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환자입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET404));
     }
 
     public List<PetResponse> findAll() {
@@ -39,7 +41,7 @@ public class PetService {
     @Transactional
     public PetResponse updatePet(Long petId, PetUpdateRequest request) {
         Pet pet = petRepository.findById(petId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 환자입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET404));
         pet.updatePet(
                 request.getPetName(),
                 request.getOwnerName(),
@@ -53,7 +55,7 @@ public class PetService {
     @Transactional
     public void deletePet(Long petId) {
         if (!petRepository.existsById(petId)) {
-            throw new IllegalArgumentException("존재하지 않는 환자입니다.");
+            throw new BusinessException(ErrorCode.PET404);
         }
         petRepository.deleteById(petId);
     }
