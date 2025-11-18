@@ -3,7 +3,6 @@ package vet.vetclinic.ai.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.ai.tool.annotation.ToolParam;
 
 @Getter
 @Builder
