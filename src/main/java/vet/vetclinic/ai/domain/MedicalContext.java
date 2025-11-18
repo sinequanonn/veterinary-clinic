@@ -15,7 +15,8 @@ public class MedicalContext {
         text.append(String.format("이름: %s\n", medicalRecord.getPet().getPetName()));
         text.append(String.format("품종: %s\n", medicalRecord.getPet().getBreed()));
         text.append(String.format("생년월일: %s\n", medicalRecord.getPet().getBirthDate()));
-        text.append(String.format("체중: %.1fkg\n\n", medicalRecord.getPet().getWeight()));
+        text.append(String.format("체중: %.1fkg\n", medicalRecord.getPet().getWeight()));
+        text.append(String.format("보호자명: %s\n\n", medicalRecord.getPet().getOwnerName()));
 
         text.append("===진료기록===\n");
         text.append(String.format("subjective: %s\n", medicalRecord.getSubjective()));
