@@ -47,6 +47,9 @@ public class MedicalReportService {
     }
 
     public List<MedicalReportOfPetResponse> findByPetId(Long petId) {
+        if (!petRepository.existsById(petId)) {
+            throw new BusinessException(ErrorCode.PET404);
+        }
         return medicalReportRepository.findByPet_PetId(petId).stream()
                 .map(MedicalReportOfPetResponse::from)
                 .toList();
