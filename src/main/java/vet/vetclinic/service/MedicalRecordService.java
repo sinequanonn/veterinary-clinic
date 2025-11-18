@@ -47,6 +47,9 @@ public class MedicalRecordService {
     }
 
     public List<MedicalRecordOfPetResponse> findByPetId(Long petId) {
+        if (!petRepository.existsById(petId)) {
+            throw new BusinessException(ErrorCode.PET404);
+        }
         List<MedicalRecord> records = medicalRecordRepository.findByPet_PetId(petId);
 
         return records.stream()
