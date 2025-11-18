@@ -12,7 +12,7 @@ import vet.vetclinic.service.PetService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/pet")
+@RequestMapping("/api/v1/pets")
 public class PetController {
     private final PetService petService;
 

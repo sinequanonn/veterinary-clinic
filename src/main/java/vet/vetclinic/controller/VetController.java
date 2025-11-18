@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/vet")
+@RequestMapping("/api/v1/vets")
 public class VetController {
     private final VetService vetService;
 

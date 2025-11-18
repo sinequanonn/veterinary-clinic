@@ -61,6 +61,17 @@
 
 ---
 
+### AI 기반 진료 소견서 자동 생성 기능
+Spring AI를 활용해 진료 기록(Medical Record)을 기반으로 구조화된 진료 소견서 자동 생성
+
+- AI 기반 자동 소견서 생성
+  - 기록된 환자 정보, 진료 기록 내용을 기반으로 `signalment`, `chief complaint`, `assessment`, `plan`, `postoperative care` 항목을 요약 생성
+- 구조화된 JSON 응답
+  - `BeanOutputConverter`를 사용해서 일관된 스키마 DTO로 결과 반환
+- Context 기반 AI 분석
+  - 진료 기록을 MedicalContext로 변환해 단일 텍스트로 정리
+---
+
 ## 용어 사전
 | 한글명    | 영문명                | 설명                             |
 |--------|--------------------|--------------------------------|
