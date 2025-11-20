@@ -11,6 +11,10 @@ Spring Boot 기반으로 구현한 동물병원 환자 시스템입니다. 환�
 진료 기록을 가져와 LLM 컨텍스트로 변환하고,
 Spring AI를 통해 자동으로 소견서를 생성할 수 있도록 만들었습니다.
 
+---
+
+[Postman API 바로가기](https://sinequanon-7334.postman.co/workspace/%25EB%25B3%2591%25EC%259B%2590%25EC%258B%259C%25EC%258A%25A4%25ED%2585%259C~3625e5ad-533e-4aec-aed5-9ae2195843f0/collection/28933018-48e9aa49-b9d3-46e4-9d99-29c09ce4f3fb?action=share&source=copy-link&creator=28933018)
+
 
 ---
 ## 기능 사항 정의
